@@ -1,0 +1,24 @@
+{
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/"
+    },
+    {
+      "src": "/questions",
+      "dest": "/"
+    },
+    {
+      "src": "/answers",
+      "dest": "/"
+    },
+    {
+      "src": "/leaderboards",
+      "dest": "/"
+    },
+    {
+      "src": "/faqs",
+      "dest": "/"
+    }
+  ]
+}
