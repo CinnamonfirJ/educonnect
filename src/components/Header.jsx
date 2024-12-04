@@ -1,8 +1,17 @@
 import { Bell, ChevronDown, LogOut, Search } from "lucide-react";
 import { useLogin } from "../hooks/useLogin";
+import Modal from "./Modal";
+import { useState } from "react";
+import Login from "./Login";
 
 const Header = () => {
   const { isLoggedIn, loginUser } = useLogin();
+  const [open, setOpen] = useState(false);
+
+  const handleModal = () => {
+    setOpen((prevState) => !prevState);
+  };
+
   return (
     <header className='border-b bg-[#E4E3E3]'>
       <div className='max-w-7xl py-4 sm:py-6 mx-auto px-4 sm:px-6 lg:px-8'>
@@ -58,7 +67,7 @@ const Header = () => {
               </div>
             ) : (
               <button
-                onClick={() => loginUser()}
+                onClick={() => handleModal()}
                 className='px-4 py-2 rounded-md border hover:bg-gray-100'
               >
                 Login
@@ -81,7 +90,7 @@ const Header = () => {
               </div>
             ) : (
               <button
-                onClick={() => loginUser()}
+                onClick={() => handleModal()}
                 className='w-full px-4 py-2 rounded-md border hover:bg-gray-100'
               >
                 Login
@@ -90,6 +99,9 @@ const Header = () => {
           </div>
         </div>
       </div>
+      <Modal open={open} onClose={handleModal}>
+        <Login onClose={handleModal} />
+      </Modal>
     </header>
   );
 };
