@@ -20,6 +20,37 @@ import { useState } from "react";
 const HomePage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const subjects = [
+    { value: "", label: "Subject", disabled: true, selected: true },
+    { value: "mathematics", label: "Mathematics" },
+    { value: "english", label: "English Language" },
+    { value: "science", label: "Basic Science" },
+    { value: "technology", label: "Basic Technology" },
+    { value: "agriculture", label: "Agricultural Science" },
+    { value: "business", label: "Business Studies" },
+    { value: "values", label: "National Values" },
+    { value: "ict", label: "ICT" },
+    { value: "phe", label: "PHE" },
+    { value: "french", label: "French Language" },
+    { value: "arts", label: "Creative Arts" },
+    { value: "irs", label: "Religion - IRS" },
+    { value: "crs", label: "Religion - CRS" },
+    { value: "history", label: "History" },
+    { value: "pre-vocational", label: "Pre-Vocational Studies" },
+    { value: "civic", label: "Civic Education" },
+    { value: "biology", label: "Biology" },
+    { value: "chemistry", label: "Chemistry" },
+    { value: "physics", label: "Physics" },
+    { value: "economics", label: "Economics" },
+    { value: "literature", label: "Literature" },
+    { value: "government", label: "Government" },
+    { value: "accounting", label: "Accounting" },
+    { value: "commerce", label: "Commerce" },
+    { value: "geography", label: "Geography" },
+    { value: "drawing", label: "Technical Drawing" },
+    { value: "art", label: "Visual Art" },
+  ];
+
   return (
     <div className='min-h-screen bg-gray-50'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
@@ -92,13 +123,16 @@ const HomePage = () => {
                 </div>
                 <div className='relative w-full sm:w-64'>
                   <select className='w-full appearance-none border rounded-xl py-3 px-4 bg-white focus:outline-none text-lg'>
-                    <option value='' disabled>
-                      Subject
-                    </option>
-                    <option value='mathematics'>Mathematics</option>
-                    <option value='english'>English Language</option>
-                    <option value='science'>Basic Science</option>
-                    <option value='technology'>Basic Technology</option>
+                    {subjects.map((subject) => (
+                      <option
+                        key={subject.value || "default"}
+                        value={subject.value}
+                        disabled={subject.disabled}
+                        selected={subject.selected}
+                      >
+                        {subject.label}
+                      </option>
+                    ))}
                   </select>
                   <ChevronDown className='absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none' />
                 </div>
