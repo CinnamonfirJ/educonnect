@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, LogOut, Search } from "lucide-react";
+import { Bell, ChevronDown, LogOut, Search, User } from "lucide-react";
 import { useLogin } from "../hooks/useLogin";
 import Modal from "./Modal";
 import { useState } from "react";
@@ -7,6 +7,8 @@ import Login from "./Login";
 const Header = () => {
   const { isLoggedIn, loginUser } = useLogin();
   const [open, setOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const handleModal = () => {
     setOpen((prevState) => !prevState);
@@ -21,7 +23,10 @@ const Header = () => {
               Educonnect
             </a>
             <div className='sm:hidden'>
-              <button className='p-2 rounded-full hover:bg-gray-100'>
+              <button
+                className='p-2 rounded-full hover:bg-gray-100'
+                onClick={() => setShowNotifications((prev) => !prev)}
+              >
                 <Bell className='h-5 w-5' />
               </button>
             </div>
@@ -47,51 +52,90 @@ const Header = () => {
             </div>
           </div>
 
-          <div className='hidden sm:flex items-center space-x-4'>
-            <button className='p-2 rounded-full hover:bg-gray-100'>
+          <div className='hidden sm:flex items-center space-x-4 relative'>
+            {/* Notification Dropdown */}
+            <button
+              className='p-2 rounded-full hover:bg-gray-100'
+              onClick={() => setShowNotifications((prev) => !prev)}
+            >
               <Bell className='h-5 w-5' />
             </button>
+            {showNotifications && (
+              <div className='absolute top-12 right-20 w-64 z-10 bg-white border rounded-lg shadow-lg'>
+                <div className='p-4 border-b'>
+                  <strong>4 notifications unread</strong>
+                </div>
+                <ul className='divide-y'>
+                  <li className='p-4'>
+                    <strong>Posted a question</strong>
+                    <p>Your question post has been approved!</p>
+                  </li>
+                  <li className='p-4'>
+                    <strong>Gotten an answer</strong>
+                    <p>You have an answer from Adeking47!</p>
+                  </li>
+                  <li className='p-4'>
+                    <strong>Level Up! - Master</strong>
+                    <p>You've reached a new level of expertise!</p>
+                  </li>
+                  <li className='p-4'>
+                    <strong>New Comment from Peter</strong>
+                  </li>
+                </ul>
+              </div>
+            )}
 
+            {/* Profile Dropdown */}
             {isLoggedIn ? (
-              <div className='flex items-center space-x-4'>
-                <img
-                  src='/Frame 14.png'
-                  alt='User avatar'
-                  width={32}
-                  height={32}
-                  className='rounded-full'
-                />
+              <div className='relative flex gap-2'>
+                <button
+                  className='flex items-center space-x-2'
+                  onClick={() => setShowProfileMenu((prev) => !prev)}
+                >
+                  <img
+                    src='/Frame 14.png'
+                    alt='User avatar'
+                    width={32}
+                    height={32}
+                    className='rounded-full'
+                  />
+                  <ChevronDown className='h-4 w-4' />
+                </button>
                 <button>
                   <LogOut onClick={() => loginUser()} />
                 </button>
+                {showProfileMenu && (
+                  <div className='absolute right-10 top-10 w-48 bg-white border rounded-lg shadow-lg'>
+                    <ul className='divide-y'>
+                      <li className='p-4 hover:bg-gray-100'>
+                        <button className='flex items-center space-x-2'>
+                          <User className='h-5 w-5' />
+                          <span>Profile</span>
+                        </button>
+                      </li>
+                      <li className='p-4 hover:bg-gray-100'>
+                        <button className='flex items-center space-x-2'>
+                          <span>My Questions</span>
+                        </button>
+                      </li>
+                      <li className='p-4 hover:bg-gray-100'>
+                        <button className='flex items-center space-x-2'>
+                          <span>My Answers</span>
+                        </button>
+                      </li>
+                      <li className='p-4 hover:bg-gray-100'>
+                        <button className='flex items-center space-x-2'>
+                          <span>Settings</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
             ) : (
               <button
                 onClick={() => handleModal()}
                 className='px-4 py-2 rounded-md border hover:bg-gray-100'
-              >
-                Login
-              </button>
-            )}
-          </div>
-          <div className='sm:hidden w-full'>
-            {isLoggedIn ? (
-              <div className='flex justify-end items-center space-x-4'>
-                <img
-                  src='/Frame 14.png'
-                  alt='User avatar'
-                  width={32}
-                  height={32}
-                  className='rounded-full'
-                />
-                <button>
-                  <LogOut onClick={() => loginUser()} />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => handleModal()}
-                className='w-full px-4 py-2 rounded-md border hover:bg-gray-100'
               >
                 Login
               </button>
