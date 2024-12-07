@@ -19,6 +19,22 @@
     {
       "src": "/faqs",
       "dest": "/"
+    },
+    {
+      "src": "/privacy",
+      "dest": "/"
+    },
+    {
+      "src": "/terms",
+      "dest": "/"
+    },
+    {
+      "src": "/search",
+      "dest": "/"
+    },
+    {
+      "src": "/profile",
+      "dest": "/"
     }
   ]
 }
