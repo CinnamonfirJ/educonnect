@@ -29,9 +29,9 @@ export default function QuestionForm({ onClose }) {
 
   return (
     <div className='flex items-center justify-center bg-white p-4'>
-      <div className='w-full max-w-xl space-y-6'>
-        <form onSubmit={handleSubmit} className='space-y-6'>
-          <div className='space-y-2'>
+      <div className='w-full max-w-xl space-y-4'>
+        <form onSubmit={handleSubmit} className='space-y-4'>
+          <div className='space-y-1'>
             <label htmlFor='subject' className='block'>
               Subject
             </label>
@@ -46,7 +46,7 @@ export default function QuestionForm({ onClose }) {
             />
           </div>
 
-          <div className='space-y-2'>
+          <div className='space-y-1'>
             <label htmlFor='question' className='block '>
               Question
             </label>
@@ -57,11 +57,11 @@ export default function QuestionForm({ onClose }) {
               onChange={handleChange}
               placeholder='Enter your question'
               className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200'
-              rows='3'
+              rows='2'
             ></textarea>
           </div>
 
-          <div className='space-y-2'>
+          <div className='space-y-1'>
             <label htmlFor='answer' className='block '>
               Answer
             </label>
@@ -72,11 +72,11 @@ export default function QuestionForm({ onClose }) {
               onChange={handleChange}
               placeholder='Enter answer'
               className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200'
-              rows='3'
+              rows='2'
             ></textarea>
           </div>
 
-          <div className='space-y-2'>
+          <div className='space-y-1'>
             <label htmlFor='file-upload' className='block text-lg font-medium'>
               Upload File <span className='text-gray-500'>(if any)</span>
             </label>
@@ -93,7 +93,7 @@ export default function QuestionForm({ onClose }) {
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
-                  className='h-10 w-10 mb-2'
+                  className='h-5 w-5 mb-2'
                   fill='none'
                   viewBox='0 0 24 24'
                   stroke='currentColor'
@@ -118,7 +118,7 @@ export default function QuestionForm({ onClose }) {
             )}
           </div>
 
-          {/* <div className='space-y-2'>
+          {/* <div className='space-y-1'>
             <label htmlFor='file' className='block '>
               Upload File (if any)
             </label>

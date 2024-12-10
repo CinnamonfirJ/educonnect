@@ -1,6 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
+import LoadingText from "./LoadingText";
 
 export default function LoginForm({ onClose }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -9,10 +10,13 @@ export default function LoginForm({ onClose }) {
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const { login, error, isLoading } = useLogin();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle login logic here
     onClose();
+    await login(formData);
     console.log("Form submitted:", formData);
   };
 
@@ -24,7 +28,7 @@ export default function LoginForm({ onClose }) {
     }));
   };
 
-  const { loginUser } = useLogin();
+  // const { loginUser } = useLogin();
 
   return (
     <div className='flex items-center justify-center bg-white p-4'>
@@ -76,10 +80,13 @@ export default function LoginForm({ onClose }) {
 
             <button
               type='submit'
-              onClick={() => loginUser()}
-              className='w-full py-3 rounded-lg bg-[#FFE4AC] hover:bg-white border border-black transition-colors duration-100'
+              className={
+                isLoading
+                  ? "w-full py-3 rounded-lg bg-white border border-black transition-colors duration-100"
+                  : "w-full py-3 rounded-lg bg-[#FFE4AC] hover:bg-white border border-black transition-colors duration-100"
+              }
             >
-              Login
+              {isLoading ? <LoadingText text='Authenticating' /> : "Login"}
             </button>
           </form>
 

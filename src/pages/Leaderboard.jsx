@@ -11,6 +11,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useState } from "react";
+import Sidebar from "../components/Sidebar";
 
 const leaderboardData = [
   {
@@ -112,56 +113,10 @@ const Leaderboard = () => {
     <div className='min-h-screen bg-gray-50'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
         <div className='flex flex-col md:flex-row gap-8'>
-          {/* Mobile sidebar toggle */}
-          <button
-            className='md:hidden mb-4 p-2 bg-white rounded-md shadow'
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            <Menu className='h-6 w-6' />
-          </button>
-
-          {/* Sidebar */}
-          <nav
-            className={`${
-              sidebarOpen ? "block" : "hidden"
-            } md:block w-full md:w-48 space-y-1 mb-4 md:mb-0`}
-          >
-            <a
-              href='/'
-              className='flex items-center px-3 py-2 rounded-md hover:bg-gray-100'
-            >
-              <Home className='mr-3 h-5 w-5' />
-              Home
-            </a>
-            <a
-              href='/questions'
-              className='flex items-center px-3 py-2 rounded-md hover:bg-gray-100'
-            >
-              <MessageSquare className='mr-3 h-5 w-5' />
-              Questions
-            </a>
-            <a
-              href='/answers'
-              className='flex items-center px-3 py-2 rounded-md hover:bg-gray-100'
-            >
-              <MessageSquare className='mr-3 h-5 w-5' />
-              Answers
-            </a>
-            <a
-              href='/leaderboards'
-              className='flex items-center px-3 py-2 rounded-md hover:bg-gray-100 bg-gray-100'
-            >
-              <Trophy className='mr-3 h-5 w-5' />
-              Leaderboards
-            </a>
-            <a
-              href='/faqs'
-              className='flex items-center px-3 py-2 rounded-md hover:bg-gray-100'
-            >
-              <HelpCircle className='mr-3 h-5 w-5' />
-              FAQs
-            </a>
-          </nav>
+          {/* sidebar */}
+          <div className='sticky top-32 h-full'>
+            <Sidebar />
+          </div>
 
           {/* Main Content */}
           <main className='flex-1'>

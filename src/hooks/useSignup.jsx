@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuth";
 
-export const useLogin = () => {
+export const useSignup = () => {
   const [error, setError] = useState(null); // null instead of an empty string for better error handling
   const [isLoading, setIsLoading] = useState(false);
   const { dispatch } = useAuthContext();
 
-  const login = async ({ email, password }) => {
+  const signup = async ({ name, email, password, confirm_password }) => {
     setError(null);
     setIsLoading(true);
     dispatch({ type: "LOGIN", payload: null });
@@ -15,7 +15,7 @@ export const useLogin = () => {
 
     try {
       const response = await fetch(
-        `https://educonnect-fv60.onrender.com/api/v1/auth/signin`, // Ensure this URL is accessible
+        `https://educonnect-fv60.onrender.com/api/v1/auth/signup`, // Ensure this URL is accessible
         {
           method: "POST",
           headers: {
@@ -24,17 +24,15 @@ export const useLogin = () => {
             // Accept: "application/json", // Matches the curl request
           },
           body: JSON.stringify({
+            name,
             email,
             password,
-            // Matches the backend API's field name
+            confirm_password, // Matches the backend API's field name
           }),
         }
       );
 
       const json = await response.json();
-      console.log(JSON.stringify({ email, password }));
-      localStorage.setItem("token", json.results.token);
-      console.log(json.results.token);
 
       if (!response.ok) {
         setIsLoading(false);
@@ -42,10 +40,29 @@ export const useLogin = () => {
         return;
       }
 
-      console.log(JSON.stringify(json));
-      localStorage.setItem("user", JSON.stringify(json));
+      // Step 3: Fetch the user data
+      const userResponse = await fetch(
+        `https://educonnect-fv60.onrender.com/api/v1/auth/user`, // Replace with the correct Get User endpoint
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      dispatch({ type: "LOGIN", payload: json });
+      const userData = await userResponse.json();
+
+      if (!userResponse.ok) {
+        setIsLoading(false);
+        setError(userData.error || "Failed to fetch user data.");
+        return;
+      }
+
+      // Step 4: Store user data in context and localStorage
+      console.log("User Data:", userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      dispatch({ type: "LOGIN", payload: userData });
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -53,5 +70,5 @@ export const useLogin = () => {
     }
   };
 
-  return { login, error, isLoading };
+  return { signup, error, isLoading };
 };

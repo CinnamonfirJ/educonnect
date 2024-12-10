@@ -4,6 +4,7 @@ import { Bell, ChevronDown, LogOut, Search, User } from "lucide-react";
 import { useLogin } from "../hooks/useLogin";
 import Modal from "./Modal";
 import Login from "./Login";
+import { useLogout } from "../hooks/useLogout";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -23,6 +24,9 @@ const Header = () => {
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
+
+  const user = localStorage.getItem("user");
+  const { logout } = useLogout();
 
   return (
     <header className='border-b bg-[#224373]'>
@@ -104,7 +108,7 @@ const Header = () => {
             )}
 
             {/* Profile Dropdown */}
-            {isLoggedIn ? (
+            {user ? (
               <div className='relative flex gap-2'>
                 <button
                   className='flex items-center space-x-2'
@@ -120,7 +124,7 @@ const Header = () => {
                   <ChevronDown className='h-4 w-4' />
                 </button>
                 <button>
-                  <LogOut onClick={() => loginUser()} />
+                  <LogOut onClick={() => logout()} />
                 </button>
                 {showProfileMenu && (
                   <div className='absolute right-10 top-10 w-48 bg-white border rounded-lg shadow-lg'>

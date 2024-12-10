@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 
@@ -13,6 +13,26 @@ export default function Profile() {
     "Accounting",
     "Literature",
   ];
+  const [userDetails, setUserDetails] = useState({
+    name: "",
+    email: "",
+    badge: "",
+    points: "",
+  });
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      setUserDetails({
+        name: parsedUser.results.name,
+        email: parsedUser.results.email,
+        badge: parsedUser.results.badge,
+        points: parsedUser.results.points,
+      });
+    }
+  }, []);
 
   return (
     <div className='min-h-screen bg-gray-50'>
@@ -30,13 +50,12 @@ export default function Profile() {
                   className='rounded-xl'
                 />
                 <div>
-                  <h1 className='text-2xl font-semibold'>
-                    Ngozi Yusuf Adedeji
-                  </h1>
+                  <h1 className='text-2xl font-semibold'>{userDetails.name}</h1>
                   <div className='flex items-center gap-2 text-gray-600'>
-                    <span>4,600 points</span>
+                    <span>{userDetails.points} points</span>
                     <span className='flex items-center gap-1'>
-                      Mentor <span className='text-red-500'>🎯</span>
+                      {userDetails.badge}{" "}
+                      <span className='text-red-500'>🎯</span>
                     </span>
                   </div>
                 </div>
@@ -56,7 +75,7 @@ export default function Profile() {
               <div className='flex items-start gap-4'>
                 <input
                   type='email'
-                  defaultValue='ngozimerry@mail.com'
+                  value={userDetails.email}
                   className='flex-1 p-3 border rounded-xl'
                   disabled
                 />

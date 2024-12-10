@@ -15,7 +15,7 @@ export const useLogin = () => {
 
     try {
       const response = await fetch(
-        `https://educonnect-fv60.onrender.com/api/v1/auth/signin`, // Ensure this URL is accessible
+        `https://educonnect-fv60.onrender.com/api/v1/auth/user`, // Ensure this URL is accessible
         {
           method: "POST",
           headers: {
@@ -32,9 +32,6 @@ export const useLogin = () => {
       );
 
       const json = await response.json();
-      console.log(JSON.stringify({ email, password }));
-      localStorage.setItem("token", json.results.token);
-      console.log(json.results.token);
 
       if (!response.ok) {
         setIsLoading(false);
@@ -42,10 +39,29 @@ export const useLogin = () => {
         return;
       }
 
-      console.log(JSON.stringify(json));
-      localStorage.setItem("user", JSON.stringify(json));
+      // Step 3: Fetch the user data
+      const userResponse = await fetch(
+        `https://educonnect-fv60.onrender.com/api/v1/auth/user`, // Replace with the correct Get User endpoint
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      dispatch({ type: "LOGIN", payload: json });
+      const userData = await userResponse.json();
+
+      if (!userResponse.ok) {
+        setIsLoading(false);
+        setError(userData.error || "Failed to fetch user data.");
+        return;
+      }
+
+      // Step 4: Store user data in context and localStorage
+      console.log("User Data:", userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      dispatch({ type: "LOGIN", payload: userData });
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

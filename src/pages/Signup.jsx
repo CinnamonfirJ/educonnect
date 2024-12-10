@@ -9,6 +9,8 @@ import {
   Trophy,
 } from "lucide-react";
 import { useState } from "react";
+import { useSignup } from "../hooks/useSignup";
+import LoadingText from "../components/LoadingText";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,13 +21,16 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirm_password: "",
   });
 
-  const handleSubmit = (e) => {
+  const { signup, error, isLoading } = useSignup();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle login logic here
     console.log("Form submitted:", formData);
+    await signup(formData);
   };
 
   const handleChange = (e) => {
@@ -158,16 +163,16 @@ const Signup = () => {
                     </div>
                   </div>
                   <div className='space-y-2'>
-                    <label htmlFor='confirmPassword' className='block text-xl'>
+                    <label htmlFor='confirm_password' className='block text-xl'>
                       Confirm Password
                     </label>
                     <div className='relative'>
                       <input
-                        id='confirmPassword'
-                        name='password'
-                        type={showPassword ? "text" : "password"}
+                        id='confirm_password'
+                        name='confirm_password'
+                        type={showPassword ? "text" : "confirm_password"}
                         required
-                        value={formData.confirmPassword}
+                        value={formData.confirm_password}
                         onChange={handleChange}
                         placeholder='Enter password'
                         className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200'
@@ -215,9 +220,17 @@ const Signup = () => {
 
                   <button
                     type='submit'
-                    className='w-full py-3 rounded-lg bg-[#FFE4AC] hover:bg-white border border-black transition-colors duration-100'
+                    className={
+                      isLoading
+                        ? "w-full py-3 rounded-lg bg-white border border-black transition-colors duration-100"
+                        : "w-full py-3 rounded-lg bg-[#FFE4AC] hover:bg-white border border-black transition-colors duration-100"
+                    }
                   >
-                    Signup
+                    {isLoading ? (
+                      <LoadingText text='Authenticating' />
+                    ) : (
+                      "Signup"
+                    )}
                   </button>
                 </form>
 
