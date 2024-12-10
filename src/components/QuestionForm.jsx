@@ -1,22 +1,28 @@
 import { useState } from "react";
 
 export default function QuestionForm({ onClose }) {
-  const [formData, setFormData] = useState({
-    subject: "",
-    question: "",
-    answer: "",
-  });
   const [selectedFile, setSelectedFile] = useState(null);
+  const [formData, setFormData] = useState({
+    subject_id: "",
+    class_id: "102c1179-b305-11ef-a651-3c52822c87f2",
+    text: "",
+    topic: "",
+    images: selectedFile,
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Example subject list
+  const subjects = [
+    { id: "1f4e544b-b305-11ef-a651-3c52822c87f2", name: "Mathematics" },
+    { id: "2", name: "Physics" },
+    { id: "3", name: "Chemistry" },
+    { id: "4", name: "Biology" },
+  ];
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    onClose();
   };
 
   const handleChange = (e) => {
@@ -27,6 +33,69 @@ export default function QuestionForm({ onClose }) {
     }));
   };
 
+  const handleSubjectChange = (e) => {
+    const selectedId = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      subject_id: selectedId,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const submissionData = {
+      ...formData,
+      images: selectedFile, // Add file to submission if needed
+    };
+    const token = localStorage.getItem("token");
+
+    try {
+      // Create a FormData object
+      const formDataObj = new FormData();
+
+      // Append formData fields
+      formDataObj.append("subject_id", formData.subject_id);
+      formDataObj.append("class_id", formData.class_id);
+      formDataObj.append("text", formData.text);
+      formDataObj.append("topic", formData.topic);
+
+      // Append file if it exists
+      if (selectedFile) {
+        formDataObj.append("file", selectedFile);
+      }
+
+      const response = await fetch(
+        "https://educonnect-fv60.onrender.com/api/v1/questions",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: formDataObj,
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to create question");
+      }
+
+      console.log("Question created successfully:", result);
+      onClose(); // Close the form
+    } catch (err) {
+      console.error("Error creating question:", err.message);
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className='flex items-center justify-center bg-white p-4'>
       <div className='w-full max-w-xl space-y-4'>
@@ -35,44 +104,48 @@ export default function QuestionForm({ onClose }) {
             <label htmlFor='subject' className='block'>
               Subject
             </label>
-            <input
+            <select
               id='subject'
-              name='subject'
-              type='text'
-              value={formData.subject}
+              name='subject_id'
+              value={formData.subject_id}
+              onChange={handleSubjectChange}
+              className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200'
+            >
+              <option value=''>Select a subject</option>
+              {subjects.map((subject) => (
+                <option key={subject.id} value={subject.id}>
+                  {subject.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className='space-y-1'>
+            <label htmlFor='topic' className='block'>
+              Topic
+            </label>
+            <input
+              id='topic'
+              name='topic'
+              value={formData.topic}
               onChange={handleChange}
-              placeholder='Enter subject'
+              placeholder='Enter the topic'
               className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200'
             />
           </div>
 
           <div className='space-y-1'>
-            <label htmlFor='question' className='block '>
+            <label htmlFor='text' className='block'>
               Question
             </label>
             <textarea
-              id='question'
-              name='question'
-              value={formData.question}
+              id='text'
+              name='text'
+              value={formData.text}
               onChange={handleChange}
               placeholder='Enter your question'
               className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200'
-              rows='2'
-            ></textarea>
-          </div>
-
-          <div className='space-y-1'>
-            <label htmlFor='answer' className='block '>
-              Answer
-            </label>
-            <textarea
-              id='answer'
-              name='answer'
-              value={formData.answer}
-              onChange={handleChange}
-              placeholder='Enter answer'
-              className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200'
-              rows='2'
+              rows='3'
             ></textarea>
           </div>
 
@@ -118,23 +191,16 @@ export default function QuestionForm({ onClose }) {
             )}
           </div>
 
-          {/* <div className='space-y-1'>
-            <label htmlFor='file' className='block '>
-              Upload File (if any)
-            </label>
-            <input
-              id='file'
-              name='file'
-              type='file'
-              className='block w-full px-3 py-1 text-gray-500 border border-gray-300 rounded-lg'
-            />
-          </div> */}
+          {error && <div className='text-red-500 text-sm'>{error}</div>}
 
           <button
             type='submit'
-            className='w-full py-3 rounded-lg bg-[#FFE4AC] hover:bg-white border border-black transition-colors duration-100'
+            className={`w-full py-3 rounded-lg ${
+              loading ? "bg-gray-400" : "bg-[#FFE4AC]"
+            } hover:bg-white border border-black transition-colors duration-100`}
+            disabled={loading}
           >
-            Post
+            {loading ? "Posting..." : "Post"}
           </button>
         </form>
       </div>

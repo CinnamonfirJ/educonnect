@@ -18,56 +18,6 @@ This project uses React with Vite for a minimal setup with Hot Module Replacemen
 
 ## Project Structure
 
-\`\`\`
-educonnect/
-├── public/
-│ └── favicon.ico
-│
-├── src/
-│ ├── assets/
-│ │ └── images/
-│ │
-│ ├── components/
-│ │ ├── common/
-│ │ │ ├── Button.jsx
-│ │ │ └── Input.jsx
-│ │ │
-│ │ └── layout/
-│ │ ├── Header.jsx
-│ │ └── Footer.jsx
-│ │
-│ ├── hooks/
-│ │ └── useForm.js
-│ │
-│ ├── pages/
-│ │ ├── Home.jsx
-│ │ └── About.jsx
-│ │
-│ ├── services/
-│ │ └── api.js
-│ │
-│ ├── styles/
-│ │ └── index.css
-│ │
-│ ├── utils/
-│ │ └── helpers.js
-│ │
-│ ├── App.jsx
-│ └── main.jsx
-│
-├── tests/
-│ └── App.test.js
-│
-├── .eslintrc.js
-├── .gitignore
-├── index.html
-├── package.json
-├── postcss.config.js
-├── tailwind.config.js
-├── vite.config.js
-└── README.md
-\`\`\`
-
 This structure provides a clear overview of the project organization:
 
 - `public/`: Contains static assets like favicon
